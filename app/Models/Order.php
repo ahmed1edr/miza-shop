@@ -1,4 +1,5 @@
-<?
+<?php
+
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -8,27 +9,15 @@ class Order extends Model
 {
     use HasFactory;
 
-    // الخانات لي مسموح لينا نعمروهم
-    protected $fillable = [
-        'client_id', 'user_id', 'order_number', 'total_amount',
-        'status', 'payment_method', 'delivery_address'
+    protected $fillable = ['group_id','brand_id','name', 'phone', 'address', 'total', 'items', 'status'];
+
+    protected $casts = [
+        'items' => 'array',
     ];
 
-    // العلاقة 1: الطلبية تابعة لكليان واحد
-    public function client()
+    // الطلبية تابعة لماركة وحدة
+    public function brand()
     {
-        return $this->belongsTo(Client::class);
-    }
-
-    // العلاقة 2: الطلبية كياكدها موظف واحد
-    public function user()
-    {
-        return $this->belongsTo(User::class);
-    }
-
-    // العلاقة 3: الطلبية فيها بزاف ديال التفاصيل 
-    public function orderItems()
-    {
-        return $this->hasMany(OrderItem::class);
+        return $this->belongsTo(\App\Models\Brand::class);
     }
 }

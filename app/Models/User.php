@@ -18,9 +18,7 @@ class User extends Authenticatable
      * @var list<string>
      */
     protected $fillable = [
-        'name',
-        'email',
-        'password',
+        'name', 'email', 'password', 'role', 'brand_id'
     ];
 
     /**
@@ -44,5 +42,11 @@ class User extends Authenticatable
             'email_verified_at' => 'datetime',
             'password' => 'hashed',
         ];
+    }
+
+    // المستخدم (الموظف) كينتامي لعائلة وحدة
+    public function brand()
+    {
+        return $this->belongsTo(Brand::class);
     }
 }

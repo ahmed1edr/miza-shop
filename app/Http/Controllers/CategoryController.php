@@ -30,12 +30,17 @@ class CategoryController extends Controller
         // 3. كنرجعو للصفحة وكنقولو ليه راه داكشي تسجل بنجاح
         return back()->with('success', 'Catégorie ajoutée avec succès !');
     }
-    public function index()
+    public function index(Request $request)
     {
-        // كنجيبو كاع الأصناف من قاعدة البيانات
-        $categories = Category::all();
+        $query = Category::query();
 
-        // كنصيفطوهم لواحد الصفحة سميتها index
+        if ($request->has('search') && $request->search != '') {
+            $searchTerm = $request->search;
+            $query->where('name', 'like', '%' . $searchTerm . '%');
+        }
+
+        $categories = $query->get();
+
         return view('categories.index', compact('categories'));
     }
 
@@ -69,5 +74,23 @@ class CategoryController extends Controller
     {
         $category->delete();
         return redirect()->route('categories.index')->with('success', 'Catégorie supprimée avec succès !');
+    }
+    public function bulkAction(Request $request)
+    {
+        $ids = $request->ids;
+        $action = $request->action;
+
+        if (!$ids)
+            return redirect()->back()->with('error', '❌ Sélectionnez au moins un élément.');
+
+        $query = \App\Models\Category::whereIn('id', $ids);
+
+        if ($action == 'delete') {
+            $count = $query->count();
+            $query->delete();
+            \App\Models\ActivityLog::log("Suppression Massive (Catégories)", "{$count} catégories ont été supprimées.");
+            return redirect()->back()->with('success', '🗑️ Suppression réussie.');
+        }
+        return redirect()->back();
     }
 }

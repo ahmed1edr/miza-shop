@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Liste des catégories - Miza Shop</title>
+    <title>Liste des Familles - Miza Shop</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
     <style>
@@ -18,7 +18,7 @@
     @include('layouts.navbar')
 
     {{-- Contenu --}}
-    <div class="max-w-5xl mx-auto p-4 md:p-8">
+    <div class="max-w-4xl mx-auto p-4 md:p-8">
         <div class="rounded-2xl p-5 sm:p-8"
              style="background:#1a1828; border:1px solid rgba(255,255,255,0.07); box-shadow: 0 24px 60px rgba(0,0,0,0.5), 0 0 80px rgba(232,197,71,0.04);">
 
@@ -30,13 +30,13 @@
                         Miza Shop — Admin
                     </span>
                     <h2 class="text-3xl font-normal tracking-tight" style="color:#fffffe;">
-                        Liste des catégories
+                        Liste des Familles
                     </h2>
                 </div>
                 <div class="flex flex-col sm:flex-row items-stretch sm:items-center gap-4 w-full md:w-auto">
-                    <form action="{{ route('categories.index') }}" method="GET" class="flex gap-2 w-full">
+                    <form action="{{ route('brands.index') }}" method="GET" class="flex gap-2 w-full">
                         <input type="text" name="search" value="{{ request('search') }}"
-                               placeholder="Chercher une catégorie..."
+                               placeholder="Chercher une famille..."
                                class="w-full sm:w-auto px-4 py-2.5 rounded-xl text-sm outline-none transition-all duration-200"
                                style="background:rgba(255,255,255,0.05); border:1px solid rgba(255,255,255,0.1); color:#fffffe;"
                                onfocus="this.style.borderColor='#e8c547'; this.style.boxShadow='0 0 0 3px rgba(232,197,71,0.12)'"
@@ -49,12 +49,12 @@
                             🔍
                         </button>
                     </form>
-                    <a href="{{ route('categories.create') }}"
+                    <a href="{{ route('brands.create') }}"
                        class="font-semibold py-2.5 px-5 rounded-xl text-sm transition-all duration-200 text-center w-full sm:w-auto whitespace-nowrap"
                        style="background:#e8c547; color:#0f0e17; box-shadow:0 4px 20px rgba(232,197,71,0.25);"
                        onmouseover="this.style.background='#f0d060'; this.style.transform='translateY(-1px)'; this.style.boxShadow='0 8px 28px rgba(232,197,71,0.35)'"
                        onmouseout="this.style.background='#e8c547'; this.style.transform='translateY(0)'; this.style.boxShadow='0 4px 20px rgba(232,197,71,0.25)'">
-                        + Ajouter une catégorie
+                        + Ajouter une Famille
                     </a>
                 </div>
             </div>
@@ -70,49 +70,43 @@
 
             {{-- Table --}}
             <div class="overflow-x-auto rounded-xl" style="border:1px solid rgba(255,255,255,0.07);">
-                <form id="bulkForm" action="{{ route('categories.bulk') }}" method="POST"> @csrf </form>
                 <table class="w-full text-left border-collapse">
                     <thead>
                         <tr style="background:#232136;">
-                            <th class="px-5 py-4 text-xs font-semibold tracking-widest uppercase" style="color:#a7a4c0; border-bottom:1px solid rgba(255,255,255,0.07);">ID</th>
-                            <th class="px-5 py-4 text-xs font-semibold tracking-widest uppercase" style="color:#a7a4c0; border-bottom:1px solid rgba(255,255,255,0.07);">Nom</th>
-                            <th class="px-5 py-4 text-xs font-semibold tracking-widest uppercase" style="color:#a7a4c0; border-bottom:1px solid rgba(255,255,255,0.07);">Slug</th>
-                            <th class="px-5 py-4 text-xs font-semibold tracking-widest uppercase" style="color:#a7a4c0; border-bottom:1px solid rgba(255,255,255,0.07);">Date</th>
-                            <th class="px-5 py-4 text-xs font-semibold tracking-widest uppercase text-center" style="color:#a7a4c0; border-bottom:1px solid rgba(255,255,255,0.07);">Actions</th>
+                            <th class="px-5 py-4 text-xs font-semibold tracking-widest uppercase"
+                                style="color:#a7a4c0; border-bottom:1px solid rgba(255,255,255,0.07);">ID</th>
+                            <th class="px-5 py-4 text-xs font-semibold tracking-widest uppercase"
+                                style="color:#a7a4c0; border-bottom:1px solid rgba(255,255,255,0.07);">Nom de la Famille</th>
+                            <th class="px-5 py-4 text-xs font-semibold tracking-widest uppercase"
+                                style="color:#a7a4c0; border-bottom:1px solid rgba(255,255,255,0.07);">Date d'ajout</th>
+                            <th class="px-5 py-4 text-xs font-semibold tracking-widest uppercase text-center"
+                                style="color:#a7a4c0; border-bottom:1px solid rgba(255,255,255,0.07);">Actions</th>
                         </tr>
                     </thead>
                     <tbody>
-                        @foreach($categories as $category)
+                        @foreach($brands as $brand)
                         <tr style="border-bottom:1px solid rgba(255,255,255,0.05); transition:background 0.15s;"
                             onmouseover="this.style.background='rgba(232,197,71,0.04)'"
                             onmouseout="this.style.background='transparent'">
-                            <td class="px-5 py-4 text-sm" style="color:#a7a4c0;">{{ $category->id }}</td>
-                            <td class="px-5 py-4 font-semibold" style="color:#e8c547;">{{ $category->name }}</td>
-                            <td class="px-5 py-4 text-sm font-mono" style="color:#6e6b8a;">{{ $category->slug }}</td>
-                            <td class="px-5 py-4 text-sm" style="color:#6e6b8a;">{{ $category->created_at->format('d/m/Y') }}</td>
+
+                            <td class="px-5 py-4 text-sm" style="color:#a7a4c0;">{{ $brand->id }}</td>
+                            <td class="px-5 py-4 font-semibold text-sm" style="color:#e8c547;">{{ $brand->name }}</td>
+                            <td class="px-5 py-4 text-sm" style="color:#6e6b8a;">{{ $brand->created_at->format('d/m/Y') }}</td>
+
                             <td class="px-5 py-4 text-center">
-                                <div class="flex items-center justify-center gap-3">
-                                    <a href="{{ route('categories.edit', $category->id) }}"
-                                       class="text-xs font-semibold px-3 py-1.5 rounded-lg transition-all duration-200"
-                                       style="background:rgba(99,102,241,0.12); color:#818cf8; border:1px solid rgba(99,102,241,0.2);"
-                                       onmouseover="this.style.background='rgba(99,102,241,0.22)'; this.style.color='#a5b4fc'"
-                                       onmouseout="this.style.background='rgba(99,102,241,0.12)'; this.style.color='#818cf8'">
-                                        ✎ Modifier
-                                    </a>
-                                    <form action="{{ route('categories.destroy', $category->id) }}" method="POST"
-                                          class="inline-block"
-                                          onsubmit="return confirm('Voulez-vous vraiment supprimer cette catégorie ?');">
-                                        @csrf
-                                        @method('DELETE')
-                                        <button type="submit"
-                                                class="text-xs font-semibold px-3 py-1.5 rounded-lg transition-all duration-200"
-                                                style="background:rgba(239,68,68,0.1); color:#f87171; border:1px solid rgba(239,68,68,0.2);"
-                                                onmouseover="this.style.background='rgba(239,68,68,0.2)'; this.style.color='#fca5a5'"
-                                                onmouseout="this.style.background='rgba(239,68,68,0.1)'; this.style.color='#f87171'">
-                                            ✕ Supprimer
-                                        </button>
-                                    </form>
-                                </div>
+                                <form action="{{ route('brands.destroy', $brand->id) }}" method="POST"
+                                      class="inline-block"
+                                      onsubmit="return confirm('Voulez-vous vraiment supprimer cette famille ?');">
+                                    @csrf
+                                    @method('DELETE')
+                                    <button type="submit"
+                                            class="text-xs font-semibold px-3 py-1.5 rounded-lg transition-all duration-200"
+                                            style="background:rgba(239,68,68,0.1); color:#f87171; border:1px solid rgba(239,68,68,0.2);"
+                                            onmouseover="this.style.background='rgba(239,68,68,0.2)'; this.style.color='#fca5a5'"
+                                            onmouseout="this.style.background='rgba(239,68,68,0.1)'; this.style.color='#f87171'">
+                                        ✕ Supprimer
+                                    </button>
+                                </form>
                             </td>
                         </tr>
                         @endforeach
@@ -121,10 +115,10 @@
             </div>
 
             {{-- Empty state --}}
-            @if($categories->isEmpty())
+            @if($brands->isEmpty())
                 <div class="text-center py-16">
-                    <div class="text-4xl mb-4">🗂️</div>
-                    <p class="font-medium" style="color:#a7a4c0;">Aucune catégorie trouvée.</p>
+                    <div class="text-4xl mb-4">🏷️</div>
+                    <p class="font-medium" style="color:#a7a4c0;">Aucune famille trouvée.</p>
                     <p class="text-sm mt-1" style="color:#6e6b8a;">Commencez par en ajouter une !</p>
                 </div>
             @endif
